@@ -25,12 +25,12 @@ function chargeEvents() {
             for (let j = 0; j < column; j++) {
                 td = document.createElement("td");//create the columns
                 tr.appendChild(td);  //add the td to tr 
-                let cont = F11(array_number); 
+                let cont = F11(array_number);
                 td.appendChild(F12(cont[i][j]));
             }
         }
 
-      
+
     }
 
 }
