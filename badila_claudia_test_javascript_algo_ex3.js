@@ -1,23 +1,31 @@
 document.addEventListener("readystatechange", chargeEvents3, false);
 function chargeEvents3() {
     if (document.readyState === "interactive") {
-
+        // createTable();
         F31();
         F32();
-        getRegions()
+        F33();
     }
 }
 
 function F31() {
-    // fillMatrix() help function
+    // fillMatrix() help function that recovers the numbers of the table
 
-    let table = document.getElementById('to_check');
+    let table = document.getElementById('error');
+    let tab = document.getElementById('to_check')
 
     for (let i = 0; i < fillMatrix().length; i++) {
 
         if (F21(fillMatrix()[i]) === false) {
-            text1 = document.createTextNode("Line " + (i) + ' incorrect');
-            table.rows[i].insertCell().appendChild(text1);
+
+            let tr = document.createElement("tr"); //create the rows
+            table.appendChild(tr);
+            text1 = document.createTextNode("Line " + (i + 1) + ' incorrect');
+            table.rows[0].insertCell().appendChild(text1);
+            for (let j = 0; j < fillMatrix()[i].length; j++) {
+                text2 = document.createTextNode(tab.rows[i].cells[j].innerHTML);
+                table.rows[0].insertCell().appendChild(text2);
+            }
         }
 
     }
@@ -26,17 +34,56 @@ function F31() {
 }
 function F32() {
     // fillMatrix() help function
-    let table = document.getElementById('to_check');
+    let table = document.getElementById('error');
+    let tab = document.getElementById('to_check');
+    let column = 0;
+    let tabColumn = [];
+    let tr = document.createElement("tr"); //create the rows
+    table.appendChild(tr);
     for (let i = 0; i < fillMatrix().length; i++) {
         for (let j = 0; j < fillMatrix()[i].length; j++) {
             if (F21(fillMatrix()[j]) === false) {
-                text1 = document.createTextNode("Column " + (j) + ' incorrect');
-                table.rows[j].insertCell(0).appendChild(text1);
-                break;
+
+                column = j + 1;
+                tabColumn = tab.rows[i].cells[j].innerHTML;
+                text2 = document.createTextNode(tabColumn);
+                table.rows[1].insertCell().appendChild(text2);
             }
 
         }
     }
+
+    if (column > 0) {
+        text1 = document.createTextNode("Column " + column + ' incorrect');
+        table.rows[1].insertCell(0).appendChild(text1);
+    }
+
+
+}
+
+function F33() {
+    let table = document.getElementById('error');
+    for (let i = 0; i < getRegions().length; i++) {
+        for (let j = 0; j <= 4; j++) {
+            let arrConcat = getRegions()[i][j].concat(getRegions()[i][j + 1], getRegions()[i][j + 2]);
+            if (F21(arrConcat) === false) {
+                let tr = document.createElement("tr"); //create the rows
+                table.appendChild(tr);
+                text1 = document.createTextNode("Region " + (i + 1) + ' incorrect');
+                table.rows[2].insertCell().appendChild(text1);
+                for (let k = 0; k < arrConcat.length; k++) {
+
+                    text2 = document.createTextNode(arrConcat[k]);
+                    table.rows[2].insertCell().appendChild(text2);
+                }
+
+            }
+            break;
+        }
+
+
+    }
+
 }
 
 //helper functions:
@@ -55,59 +102,33 @@ function fillMatrix() {
     return matrix;
 }
 
-function getRegions() {
-    let arr = [
-        [0, 2, 3, 4, 5, 6, 7, 8, 9],
-        [1, 2, 3, 4, 5, 6, 7, 8, 9],
-        [2, 2, 3, 4, 5, 6, 7, 8, 9],
-        [3, 2, 3, 4, 5, 6, 7, 8, 9],
-        [3, 2, 3, 4, 5, 6, 7, 8, 9],
-        [3, 2, 3, 4, 5, 6, 7, 8, 9],
-        [4, 2, 3, 4, 5, 6, 7, 8, 9],
-        [4, 2, 3, 4, 5, 6, 7, 8, 9],
-        [4, 2, 3, 4, 5, 6, 7, 8, 9]
-    ]
-    let cont = 0;
-    let mat = new Array(9);
-    mat[0] = [];
-    mat[1] = []
-    mat[2] = []
-    mat[3] = []
-    mat[4] = []
-    mat[5] = []
-    mat[6] = []
-    mat[7] = []
-    mat[8] = []
-    for (let i = 0; i < arr.length; i++) {
 
+function getRegions() {
+    // put regions in another bidimensional array
+    let mat = new Array(9);
+    for (let i = 0; i < mat.length; i++) {
+        mat[i] = [];
+    }
+
+    for (let i = 0; i < fillMatrix().length; i++) {
 
         if (i < 3) {
-            // mat[0].push(arr[i].slice(0,3));
-            mat[4].push(arr[i].slice(1, 5))
-
-
+            mat[0].push(fillMatrix()[i].slice(0, 3))
+            mat[1].push(fillMatrix()[i].slice(3, 6))
+            mat[2].push(fillMatrix()[i].slice(6, 9))
+        }
+        if (i > 2 && i < 6) {
+            mat[3].push(fillMatrix()[i].slice(0, 3))
+            mat[4].push(fillMatrix()[i].slice(3, 6))
+            mat[5].push(fillMatrix()[i].slice(6, 9))
+        }
+        if (i > 5 && i < 9) {
+            mat[6].push(fillMatrix()[i].slice(0, 3))
+            mat[7].push(fillMatrix()[i].slice(3, 6))
+            mat[8].push(fillMatrix()[i].slice(6, 9))
         }
 
-
-        if (i >= 3 && i < 6) {
-            mat[1].push(arr[i].slice(0, 3));
-
-        }
-        if (i >= 6 && i < 9) {
-            mat[2].push(arr[i].slice(0, 3));
-
-        }
-
-        //    if(mat.length==0){
-        //     mat[0]= new Array();
-        //    }
-        //     if(i%3!==0){
-        //        mat[cont]=arr[i].slice(0,3)
-        //     }else{
-        //         cont++;
-        //     }
     }
-    console.log(mat)
-    console.log(arr)
+    return mat;
 
 }
