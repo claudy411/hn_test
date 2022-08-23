@@ -1,7 +1,7 @@
 document.addEventListener("readystatechange", chargeEvents3, false);
 function chargeEvents3() {
     if (document.readyState === "interactive") {
-        // createTable();
+     
         F31();
         F32();
         F33();
